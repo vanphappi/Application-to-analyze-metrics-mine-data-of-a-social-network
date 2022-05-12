@@ -150,27 +150,51 @@ class d_network(pre_data):
             plt.show()
 
     def d_closeness_centrality(self):
-        if(self.pos==None):
-            super().r_pos()
-            fig, ax = plt.subplots(1,1, figsize=(25,25), dpi=50)
-            nodes = nx.draw_networkx_nodes(self.graph, self.pos, node_size=80, cmap=plt.cm.plasma, 
-                                        node_color=list(nx.closeness_centrality(self.graph.reverse(),wf_improved=False).values()),
-                                        nodelist=nx.closeness_centrality(self.graph.reverse(),wf_improved=False).keys())
-            edges = nx.draw_networkx_edges(self.graph, self.pos,alpha=0.2,width=0.5)
-            plt.title('closeness_centrality') 
-            plt.colorbar(nodes) 
-            plt.axis('off') 
-            plt.show()
-        else:
-            fig, ax = plt.subplots(1,1, figsize=(25,25), dpi=50)
-            nodes = nx.draw_networkx_nodes(self.graph, self.pos, node_size=80, cmap=plt.cm.plasma, 
-                                        node_color=list(nx.closeness_centrality(self.graph.reverse(),wf_improved=False).values()),
-                                        nodelist=nx.closeness_centrality(self.graph.reverse(),wf_improved=False).keys())
-            edges = nx.draw_networkx_edges(self.graph, self.pos,alpha=0.2,width=0.5)
-            plt.title('closeness_centrality') 
-            plt.colorbar(nodes) 
-            plt.axis('off') 
-            plt.show()          
+        try:
+            if(self.pos==None):
+                super().r_pos()
+                fig, ax = plt.subplots(1,1, figsize=(25,25), dpi=50)
+                nodes = nx.draw_networkx_nodes(self.graph, self.pos, node_size=80, cmap=plt.cm.plasma, 
+                                            node_color=list(nx.closeness_centrality(self.graph.reverse(),wf_improved=False).values()),
+                                            nodelist=nx.closeness_centrality(self.graph.reverse(),wf_improved=False).keys())
+                edges = nx.draw_networkx_edges(self.graph, self.pos,alpha=0.2,width=0.5)
+                plt.title('closeness_centrality') 
+                plt.colorbar(nodes) 
+                plt.axis('off') 
+                plt.show()
+            else:
+                fig, ax = plt.subplots(1,1, figsize=(25,25), dpi=50)
+                nodes = nx.draw_networkx_nodes(self.graph, self.pos, node_size=80, cmap=plt.cm.plasma, 
+                                            node_color=list(nx.closeness_centrality(self.graph.reverse(),wf_improved=False).values()),
+                                            nodelist=nx.closeness_centrality(self.graph.reverse(),wf_improved=False).keys())
+                edges = nx.draw_networkx_edges(self.graph, self.pos,alpha=0.2,width=0.5)
+                plt.title('closeness_centrality') 
+                plt.colorbar(nodes) 
+                plt.axis('off') 
+                plt.show()
+        except:
+            plt.close()
+            if(self.pos==None):
+                super().r_pos()
+                fig, ax = plt.subplots(1,1, figsize=(25,25), dpi=50)
+                nodes = nx.draw_networkx_nodes(self.G, self.pos, node_size=80, cmap=plt.cm.plasma, 
+                                            node_color=list(nx.closeness_centrality(self.G,wf_improved=False).values()),
+                                            nodelist=nx.closeness_centrality(self.G,wf_improved=False).keys())
+                edges = nx.draw_networkx_edges(self.G, self.pos,alpha=0.2,width=0.5)
+                plt.title('closeness_centrality') 
+                plt.colorbar(nodes) 
+                plt.axis('off') 
+                plt.show()
+            else:
+                fig, ax = plt.subplots(1,1, figsize=(25,25), dpi=50)
+                nodes = nx.draw_networkx_nodes(self.G, self.pos, node_size=80, cmap=plt.cm.plasma, 
+                                            node_color=list(nx.closeness_centrality(self.G,wf_improved=False).values()),
+                                            nodelist=nx.closeness_centrality(self.G,wf_improved=False).keys())
+                edges = nx.draw_networkx_edges(self.G, self.pos,alpha=0.2,width=0.5)
+                plt.title('closeness_centrality') 
+                plt.colorbar(nodes) 
+                plt.axis('off') 
+                plt.show()            
 
     def d_clustering_coefficient(self):
         if(self.pos==None):
@@ -315,9 +339,14 @@ class output_data(pre_data):
         self.stats_betweenness_centrality=self.stats[['NODE','BETWEENNESS CENTRALITY']]
 
     def closeness_centrality_value(self):
-        closeness_centrality_list = [v for k, v in nx.closeness_centrality(self.graph.reverse(),wf_improved=False).items()]
-        self.stats['CLOSENESS CENTRALITY']=closeness_centrality_list
-        self.stats_closeness_centrality=self.stats[['NODE','CLOSENESS CENTRALITY']]
+        try:
+            closeness_centrality_list = [v for k, v in nx.closeness_centrality(self.graph.reverse(),wf_improved=False).items()]
+            self.stats['CLOSENESS CENTRALITY']=closeness_centrality_list
+            self.stats_closeness_centrality=self.stats[['NODE','CLOSENESS CENTRALITY']]
+        except:
+            closeness_centrality_list = [v for k, v in nx.closeness_centrality(self.G,wf_improved=False).items()]
+            self.stats['CLOSENESS CENTRALITY']=closeness_centrality_list
+            self.stats_closeness_centrality=self.stats[['NODE','CLOSENESS CENTRALITY']]
 
     def clustering_coeficient_value(self):
         clustering_coeficient_list = [v for k, v in nx.clustering(self.graph).items()]
@@ -360,7 +389,6 @@ class output_data(pre_data):
             return counts
 
     def common_neighbors(self):
-        self.non_edges=nx.non_edges(self.G)
         try:
             return sorted(self.list_common_neighbors, key= lambda x: x[2] ,reverse=True)
         except:
@@ -370,7 +398,6 @@ class output_data(pre_data):
             return sorted(self.list_common_neighbors, key= lambda x: x[2] ,reverse=True)
 
     def preferential_attachment(self):
-        self.non_edges=nx.non_edges(self.G)
         try:
             return sorted(self.list_preferential_attachment, key= lambda x: x[2] ,reverse=True)
         except:
@@ -380,7 +407,7 @@ class output_data(pre_data):
             return sorted(self.list_preferential_attachment, key= lambda x: x[2] ,reverse=True)
     
     def adamic_adar(self):
-        self.non_edges=nx.non_edges(self.G)
+        
         try:
             return sorted(self.list_adamic_adar, key= lambda x: x[2] ,reverse=True)
         except:
@@ -390,7 +417,6 @@ class output_data(pre_data):
             return sorted(self.list_adamic_adar, key= lambda x: x[2] ,reverse=True)
 
     def katz(self):
-        self.non_edges=nx.non_edges(self.G)
         try:
             return sorted(self.list_katz, key= lambda x: x[1] ,reverse=True)
         except:
@@ -486,11 +512,17 @@ class backend(d_network,output_data):
     
     def link_prediction(self,type):
         if(type =='COMMON NEIGHBORS'):
+            self.non_edges=nx.non_edges(self.G)
             return self.common_neighbors()
         elif(type =='PREFERENTIAL ATTACHMENT'):
+            self.non_edges=nx.non_edges(self.G)
             return self.preferential_attachment()
         elif(type =='ADAMIC/ADAR'):
+            self.non_edges=nx.non_edges(self.G)
             return self.adamic_adar()
+        else:
+            self.non_edges=nx.non_edges(self.G)
+            return self.katz()
 
     def get_n_nodes(self):
         return int(self.n_nodes)

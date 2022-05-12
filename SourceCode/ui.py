@@ -302,12 +302,12 @@ class ui:
         data_w.load_data_ver2()
     
     def link_prediction_button_event(self,event):
-        if(self.drop_down_link_prediction=='COMMON NEIGHBORS' or self.drop_down_link_prediction=='PREFERENTIAL ATTACHMENT' or self.drop_down_link_prediction=='ADAMIC/ADAR'):
+        if(self.drop_down_link_prediction.get()=='COMMON NEIGHBORS' or self.drop_down_link_prediction.get()=='PREFERENTIAL ATTACHMENT' or self.drop_down_link_prediction.get()=='ADAMIC/ADAR'):
             data=self.backend.link_prediction(self.drop_down_link_prediction.get())
             data_w=dataview(self.drop_down_link_prediction.get(),data,0)
             data_w.load_data_ver3(len(data)-1)
-        else:
-            data=self.backend.katz()
+        elif(self.drop_down_link_prediction.get()=='KATZ'):
+            data=self.backend.link_prediction(self.drop_down_link_prediction.get())
             data_w=dataview(self.drop_down_link_prediction.get(),data,3)
             data_w.load_data_ver4(len(data)-1)
        
@@ -331,7 +331,6 @@ class ui:
                 self.body()
             except:
                 messagebox.showerror('LỖI','FILE DỮ LIỆU KHÔNG HỢP LỆ !')
-    
 
 class view:    
     root=Tk()
@@ -341,4 +340,3 @@ class view:
     def __init__(self) -> None:
         pass
 
-a=view()
