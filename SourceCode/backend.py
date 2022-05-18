@@ -19,7 +19,6 @@ class pre_data:
     stats=None
     pos=None
     non_edges=None
-
     loc_data=None
 
     def __init__(self,loc_data):
