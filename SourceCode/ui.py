@@ -12,7 +12,9 @@ from dataview import*
 
 
 class ui:
-
+    """
+    Class có chức năng khởi tạo, thiết kế bố cục giao diện và tương tác trên GUI
+    """
     centrality_button = None
     centrality_button_c = None
     centrality_button_f = None
@@ -64,7 +66,9 @@ class ui:
 
 
     def body(self):
-        
+        """
+         Thực hiện việc tạo các tương tác trên GUI
+        """
         lab0 = Label(self.master, text=self.loc_data, anchor=W, font=('arial',6,'bold'),
                      width=100).place(x=0, y=30)
 
@@ -162,6 +166,9 @@ class ui:
         return
     
     def check_drop_down_typegraph(self,*args):
+        """
+        Kiểm tra hành động chọn loại đồ thị và thực hiên việc đổi danh sách các độ đo cho phù hợp
+        """
         if(self.drop_down_typegraph.get()=="VÔ HƯỚNG"):
             self.backend.set_type_graph(0)
             self.choices_centrality = { 'DEGREE CENTRALITY','BETWEENNESS CENTRALITY', 'CLOSENESS CENTRALITY', 'CLUSTERING COEFFICIENT'}
@@ -176,10 +183,16 @@ class ui:
             popupMenu = OptionMenu(self.master, self.drop_down_centrality, *self.choices_centrality).place(x = 150 ,y = 120)
     
     def check_drop_down_centrality(self,*args):
+        """
+        Kiểm tra hành động chọn loại độ đo và thực hiên thay đổi phù hợp trên GUI
+        """
         self.centrality_button['text']='TRỰC QUAN HÓA MẠNG LIÊN KẾT ĐỘ ĐO '+self.drop_down_centrality.get()
         self.centrality_button_c['text']='ĐỘ ĐO '+self.drop_down_centrality.get()
 
     def check_drop_down_community(self,*args):
+        """
+        Kiểm tra hành động chọn loại thuật toán khám phá cộng đồng và thực hiên thay đổi phù hợp trên GUI
+        """
         if(self.drop_down_community.get()=='GIRVAN NEWMAN'):
             try:
                 self.pagerank_button.destroy()
@@ -257,9 +270,15 @@ class ui:
                 self.pagerank_ent.place(x=740, y=250)
 
     def centrality_button_event(self,event):
+        """
+        Sự kiện của nút trực quan hóa đồ thị theo độ đo đã chọn trước đó
+        """
         self.backend.d_type(self.drop_down_centrality.get())
 
     def centrality_button_c_event(self,event):
+        """
+        Sự kiện của nút đưa ra danh sách độ đo đã chọn trước đó của các node theo số lượng đã nhập 
+        """
         try:
             if (int(self.sl_node_centrality.get())>self.backend.get_n_nodes()):
                 messagebox.showerror('LỖI','SỐ LƯỢNG NODE TỐI ĐA LÀ '+str(self.backend.get_n_nodes()))
@@ -271,21 +290,36 @@ class ui:
             messagebox.showerror('LỖI','DỮ LIỆU BẠN NHẬP KHÔNG HỢP LỆ !')
     
     def centrality_button_f_event(self,event):
+        """
+        Sự kiện của nút tần suất và xác suất xuất hiện của độ đo đã chọn trước đó 
+        """
         data=self.backend.op_data_fre(self.drop_down_centrality.get())
         data_w=dataview(self.drop_down_centrality.get(),data,4)
         data_w.load_data_ver2()
 
     def girvan_button1_event(self,event):
+        """
+        Sự kiện của nút khai phá cộng đồng - hiển thị ra các cộng đồng tách được
+        """
         list_data=self.backend.girvan_newman_anal()
         view=view_discovery_algorithm(list_data)
 
     def girvan_button2_event(self,event):
+        """
+        Sự kiện của nút trực quan hóa mạng liên kết theo Girvan NewMan 
+        """
         self.backend.d_grivan_newman()
 
     def pagerank_button_even(self,event):
+        """
+        Sự kiện của nút trực quan hóa mạng liên kết theo Page Rank
+        """
         self.backend.d_page_rank()
     
     def pagerank_button_c_event(self,event):
+        """
+        Sự kiện của nút đưa ra danh sách giá trị Page Rank của các node theo số lượng đã nhập 
+        """
         try:
             if (int(self.sl_node_pagerank.get())>self.backend.get_n_nodes()):
                 messagebox.showerror('LỖI','SỐ LƯỢNG NODE TỐI ĐA LÀ '+str(self.backend.get_n_nodes()))
@@ -297,11 +331,17 @@ class ui:
             messagebox.showerror('LỖI','DỮ LIỆU BẠN NHẬP KHÔNG HỢP LỆ !')
     
     def pagerank_button_f_event(self,event):
+        """
+        Sự kiện của nút đưa ra danh sách giá trị Page Rank theoi tần suất và xác suất xuất hiện
+        """
         data=self.backend.page_rank_fre()
         data_w=dataview(self.drop_down_community.get(),data,4)
         data_w.load_data_ver2()
     
     def link_prediction_button_event(self,event):
+        """
+        Sự kiện của nút phân tích dự đoán liên kết mới theo thuật toán đã chọn trước đó
+        """
         if(self.drop_down_link_prediction.get()=='COMMON NEIGHBORS' or self.drop_down_link_prediction.get()=='PREFERENTIAL ATTACHMENT' or self.drop_down_link_prediction.get()=='ADAMIC/ADAR'):
             data=self.backend.link_prediction(self.drop_down_link_prediction.get())
             data_w=dataview(self.drop_down_link_prediction.get(),data,0)
@@ -313,12 +353,21 @@ class ui:
        
     
     def d_allnetwork_button_event(self,event):
+        """
+        Sự kiện của nút trực quan hóa đồ thị trên toàn mạng
+        """
         self.backend.d_allnetwork()
 
     def closeGUI(self, event):
+        """
+        Sự kiện của nút Đóng ứng đụng
+        """
         self.master.destroy()
 
     def open_button_even(self,event):
+        """
+        Sự kiện của nút chọn file dữ liệu từ máy tính
+        """
         file = askopenfile(mode ='r', filetypes =[('CSV File', '*.csv')]) 
         if file is not None: 
             try:
@@ -333,6 +382,7 @@ class ui:
                 messagebox.showerror('LỖI','FILE DỮ LIỆU KHÔNG HỢP LỆ !')
 
 class view:    
+    """Class có chức năng tạo đối tượng để chạy chương trình"""
     root=Tk()
     obj = ui(root)
     root.mainloop()

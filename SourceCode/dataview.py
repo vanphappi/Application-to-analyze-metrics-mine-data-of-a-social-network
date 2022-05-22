@@ -3,7 +3,7 @@ import tkinter.ttk as ttk
 import pandas as pd
 
 class dataview:
-
+    """Class có chức năng tạo model để hiện thị kết quả của dữ liệu"""
     type_c=None
     data=None
     num_col=None
@@ -36,6 +36,9 @@ class dataview:
     
     
     def body_ver1(self):
+        """
+        Model hiển thị bảng có 3 cột
+        """
         TableMargin = Frame(self.root, width=500)
         TableMargin.pack(side=TOP)
         scrollbarx = Scrollbar(TableMargin, orient=HORIZONTAL)
@@ -55,6 +58,7 @@ class dataview:
         self.tree.pack()
 
     def body_ver2(self):
+        """Model hiển thị bảng có 4 cột"""
         TableMargin = Frame(self.root, width=500)
         TableMargin.pack(side=TOP)
         scrollbarx = Scrollbar(TableMargin, orient=HORIZONTAL)
@@ -76,6 +80,9 @@ class dataview:
         self.tree.pack()
 
     def body_ver3(self):
+        """
+        Model hiển thị kết quả của việc dự đoán liên kết
+        """
         TableMargin = Frame(self.root, width=500)
         TableMargin.pack(side=TOP)
         scrollbarx = Scrollbar(TableMargin, orient=HORIZONTAL)
@@ -96,6 +103,9 @@ class dataview:
          
 
     def load_data_ver1(self,num):
+        """
+        Đưa dữ liệu lên lên model body_ver1c(theo dữ liệu của độ do và page rank)
+        """
         node=self.data['NODE'].tolist()
         type = self.data[self.type_c].tolist()
         while(num>=0):
@@ -104,6 +114,9 @@ class dataview:
         self.root.mainloop()
 
     def load_data_ver2(self):
+        """
+        Đưa dữ liệu lên lên model body_ver2
+        """
         type = self.data[self.type_c].tolist()
         fre = self.data["FREQUENCY"].tolist()
         pro = self.data["PROBABILITY"].tolist()
@@ -114,18 +127,27 @@ class dataview:
         self.root.mainloop()
 
     def load_data_ver3(self,num):
+        """
+        Đưa dữ liệu lên lên model body_ver3
+        """
         while(num>=0):
             self.tree.insert("", 0, values=(num,str(self.data[num][0])+'-'+str(self.data[num][1]),self.data[num][2]))
             num -= 1
         self.root.mainloop()
 
     def load_data_ver4(self,num):
+        """
+        Đưa dữ liệu lên lên model body_ver1 (theo dữ liệu của thuật toán Katz)
+        """
         while(num>=0):
             self.tree.insert("", 0, values=(num,self.data[num][0],self.data[num][1]))
             num -= 1
         self.root.mainloop()    
 
 class view_discovery_algorithm:
+    """
+    Class có chức năng tạo model để hiện thị kết quả khai phá cộng đồng của thuật toán Girvan NewMan 
+    """
     def __init__(self,list_data):
         root = Tk()
         root.title("KẾT QUẢ KHAI PHÁ CỘNG ĐỒNG BẰNG GIRVAN NEWMAN")

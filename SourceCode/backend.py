@@ -11,6 +11,9 @@ import numpy as np
 
 
 class pre_data:
+    """
+    Đây là class thực hiện việc tiền xử lí dữ liệu được đưa vào
+    """
     data_friend = pd.DataFrame()
     G=None
     graph=None
@@ -26,6 +29,9 @@ class pre_data:
         self.data_processing()
 
     def data_processing(self):
+        """
+        Hàm có chức năng đọc file dữ liệu, khởi tạo các node và đồ thị
+        """
         data = pd.read_csv(self.loc_data,header=None)
         self.data_friend = pd.DataFrame()
         self.data_friend[['FromNodeID','ToNodeID']]=data.iloc[:,[0,1]]
@@ -38,14 +44,22 @@ class pre_data:
         self.stats.columns=['NODE']
 
     def r_pos(self):
+        """
+        Hàm thực hiệc việc lưu một bộ từ điển về các vị trí được đóng bỏ các node trong đồ thị
+        """
         self.pos=nx.spring_layout(self.graph,k=0.15,iterations=20) 
 
 class d_network(pre_data):
-
+    """
+    Class có chức năng trực quan hóa các đồ thị theo độ đo, thuât toán khám phá cộng đồng
+    """
     def __init__(self,loc_data):
         super().__init__(loc_data)
 
     def d_allnetwork(self):
+        """
+        Hàm có chức năng trực quan hóa đồ thị cho toàn mạng
+        """
         if(self.pos==None):
             super().r_pos()
             plt.figure(figsize=(15, 15))
@@ -57,6 +71,9 @@ class d_network(pre_data):
             plt.show()
 
     def d_degree_centrally(self):
+        """
+        Hàm có chức năng trực quan hóa đồ thị theo độ do Degree Centrality
+        """
         if(self.pos==None):
             super().r_pos()
             fig, ax = plt.subplots(1,1, figsize=(25,25), dpi=50)
@@ -80,6 +97,9 @@ class d_network(pre_data):
             plt.show() 
 
     def d_in_degree_centrality(self):
+        """
+        Hàm có chức năng trực quan hóa đồ thị theo độ do In-Degree Centrality
+        """
         if(self.pos==None):
             super().r_pos()
             fig, ax = plt.subplots(1,1, figsize=(25,25), dpi=50)
@@ -103,6 +123,9 @@ class d_network(pre_data):
             plt.show()
 
     def d_out_degree_centrality(self):
+        """
+        Hàm có chức năng trực quan hóa đồ thị theo độ do Out-Degree Centrality
+        """
         if(self.pos==None):
             super().r_pos()
             fig, ax = plt.subplots(1,1, figsize=(25,25), dpi=50)
@@ -126,6 +149,9 @@ class d_network(pre_data):
             plt.show()
     
     def d_betweenness_centrality(self):
+        """
+        Hàm có chức năng trực quan hóa đồ thị theo độ do Betweenness Centrality
+        """
         if(self.pos==None):
             super().r_pos()
             fig, ax = plt.subplots(1,1, figsize=(25,25), dpi=50)
@@ -149,6 +175,9 @@ class d_network(pre_data):
             plt.show()
 
     def d_closeness_centrality(self):
+        """
+        Hàm có chức năng trực quan hóa đồ thị theo độ do Closeness Centrality
+        """
         try:
             if(self.pos==None):
                 super().r_pos()
@@ -196,6 +225,9 @@ class d_network(pre_data):
                 plt.show()            
 
     def d_clustering_coefficient(self):
+        """
+        Hàm có chức năng trực quan hóa đồ thị theo độ do Clustering Coefficient
+        """
         if(self.pos==None):
             super().r_pos()
             fig, ax = plt.subplots(1,1, figsize=(25,25), dpi=50)
@@ -219,6 +251,9 @@ class d_network(pre_data):
             plt.show()
 
     def d_grivan_newman(self):
+        """
+        Hàm có chức năng trực quan hóa đồ thị theo các cộng đồng đã tách ra được
+        """
         if(self.pos==None):
             super().r_pos()
             cluster=girvan_newman(self.graph)
@@ -274,6 +309,9 @@ class d_network(pre_data):
             plt.show()
 
     def d_page_rank(self):
+        """
+        Hàm có chức năng trực quan hóa đồ thị theo độ do Page Rank
+        """
         if(self.pos==None):
             super().r_pos()
             fig, ax = plt.subplots(1,1, figsize=(25,25), dpi=50)
@@ -297,7 +335,9 @@ class d_network(pre_data):
             plt.show() 
 
 class output_data(pre_data):
-
+    """
+    Class có chức năng tính toán và trả về các dữ liệu
+    """
     stats_Degree=None
     stats_InDegree=None
     stats_OutDegree=None
@@ -315,29 +355,44 @@ class output_data(pre_data):
         super().__init__(loc_data)
 
     def degree_centrality_value(self):
+        """
+        Tính toán và lưu lại dữ liệu của độ đo Degree Centrality theo từng Node
+        """
         degree_list = [v for k, v in nx.degree_centrality(self.graph).items()]
         self.stats['DEGREE CENTRALITY']=degree_list
         self.stats['DEGREE CENTRALITY'] = round(self.stats['DEGREE CENTRALITY'] * (self.n_nodes-1))
         self.stats_Degree=self.stats[['NODE','DEGREE CENTRALITY']]
     
     def in_degree_centrality_value(self):
+        """
+        Tính toán và lưu lại dữ liệu của độ đo In-Degree Centrality theo từng Node
+        """
         in_degree_list = [v for k, v in nx.in_degree_centrality(self.graph).items()]
         self.stats['IN-DEGREE CENTRALITY']=in_degree_list
         self.stats['IN-DEGREE CENTRALITY'] = round(self.stats['IN-DEGREE CENTRALITY'] * (self.n_nodes-1))
         self.stats_InDegree=self.stats[['NODE','IN-DEGREE CENTRALITY']]
 
     def out_degree_centrality_value(self):
+        """
+        Tính toán và lưu lại dữ liệu của độ đo Out-Degree Centrality theo từng Node
+        """
         out_degree_list = [v for k, v in nx.out_degree_centrality(self.graph).items()]
         self.stats['OUT-DEGREE CENTRALITY']=out_degree_list
         self.stats['OUT-DEGREE CENTRALITY'] = round(self.stats['OUT-DEGREE CENTRALITY'] * (self.n_nodes-1))
         self.stats_OutDegree=self.stats[['NODE','OUT-DEGREE CENTRALITY']]
     
     def betweenness_centrality_value(self):
+        """
+        Tính toán và lưu lại dữ liệu của độ đo Betweenness Centrality theo từng Node
+        """
         betweenness_centrality = [v for k, v in nx.betweenness_centrality_subset(self.graph,self.graph.nodes,self.graph.nodes).items()]
         self.stats['BETWEENNESS CENTRALITY']=betweenness_centrality
         self.stats_betweenness_centrality=self.stats[['NODE','BETWEENNESS CENTRALITY']]
 
     def closeness_centrality_value(self):
+        """
+        Tính toán và lưu lại dữ liệu của độ đo Closeness Centrality theo từng Node
+        """
         try:
             closeness_centrality_list = [v for k, v in nx.closeness_centrality(self.graph.reverse(),wf_improved=False).items()]
             self.stats['CLOSENESS CENTRALITY']=closeness_centrality_list
@@ -348,16 +403,25 @@ class output_data(pre_data):
             self.stats_closeness_centrality=self.stats[['NODE','CLOSENESS CENTRALITY']]
 
     def clustering_coeficient_value(self):
+        """
+        Tính toán và lưu lại dữ liệu của độ đo Clustering theo từng Node
+        """
         clustering_coeficient_list = [v for k, v in nx.clustering(self.graph).items()]
         self.stats['CLUSTERING COEFFICIENT']=clustering_coeficient_list
         self.stats_clustering_coeficient=self.stats[['NODE','CLUSTERING COEFFICIENT']]
     
     def centrality_fre(self,type):
+        """
+        Tính toán và trả về dữ liệu độ đo theo xác suất và số lần xuất hiên theo tên độ đo tham chiếu tới hàm
+        """
         counts=self.stats.groupby([type]).size().reset_index(name='FREQUENCY')
         counts['PROBABILITY']=counts['FREQUENCY']/counts['FREQUENCY'].sum()
         return counts
 
     def girvan_newman_anal(self):
+        """
+        Tính toán và trả về dữ liệu kết quả cộng đồng đã phân tách ra được
+        """
         list_data=[]
         cluster=girvan_newman(self.graph)
         node_groups = next(cluster)
@@ -368,6 +432,9 @@ class output_data(pre_data):
         return list_data
     
     def page_rank_anl(self,num=1):
+        """
+        Tính toán và trả về dữ liệu độ đo Page Rank theo từng node được sắp xếp từ lớn đến nhỏ
+        """
         try:
             return self.stats_pagerank.sort_values(by='PAGE RANK', ascending=False).head(num)
         except:
@@ -377,6 +444,9 @@ class output_data(pre_data):
             return self.stats_pagerank.sort_values(by='PAGE RANK', ascending=False).head(num)
     
     def page_rank_fre(self):
+        """
+        Tính toán và trả về dữ liệu độ đo theo xác suất và số lần xuất hiên theo Page Rank
+        """
         try:
             counts=self.stats.groupby(['PAGE RANK']).size().reset_index(name='FREQUENCY')
             counts['PROBABILITY']=counts['FREQUENCY']/counts['FREQUENCY'].sum()
@@ -388,6 +458,9 @@ class output_data(pre_data):
             return counts
 
     def common_neighbors(self):
+        """
+        Tính toán và trả về dữ liệu kết quả dự đoán theo thuật toán Common Neighbors
+        """
         try:
             return sorted(self.list_common_neighbors, key= lambda x: x[2] ,reverse=True)
         except:
@@ -397,6 +470,9 @@ class output_data(pre_data):
             return sorted(self.list_common_neighbors, key= lambda x: x[2] ,reverse=True)
 
     def preferential_attachment(self):
+        """
+        Tính toán và trả về dữ liệu kết quả dự đoán theo thuật toán Preferential Attachment
+        """
         try:
             return sorted(self.list_preferential_attachment, key= lambda x: x[2] ,reverse=True)
         except:
@@ -406,7 +482,9 @@ class output_data(pre_data):
             return sorted(self.list_preferential_attachment, key= lambda x: x[2] ,reverse=True)
     
     def adamic_adar(self):
-        
+        """
+        Tính toán và trả về dữ liệu kết quả dự đoán theo thuật toán Adamic/Adar
+        """
         try:
             return sorted(self.list_adamic_adar, key= lambda x: x[2] ,reverse=True)
         except:
@@ -416,6 +494,9 @@ class output_data(pre_data):
             return sorted(self.list_adamic_adar, key= lambda x: x[2] ,reverse=True)
 
     def katz(self):
+        """
+        Tính toán và trả về dữ liệu kết quả dự đoán theo thuật toán Katz
+        """
         try:
             return sorted(self.list_katz, key= lambda x: x[1] ,reverse=True)
         except:
@@ -425,7 +506,9 @@ class output_data(pre_data):
             return sorted(self.list_katz, key= lambda x: x[1] ,reverse=True)
 
 class backend(d_network,output_data):
-
+    """
+    Class có chức năng điều hướng các sự kiền từ GUI
+    """
     def __init__(self,loc_data):
         d_network.__init__(self,loc_data)
         output_data.__init__(self,loc_data)
@@ -440,6 +523,9 @@ class backend(d_network,output_data):
             
 
     def d_type(self,type):
+        """
+        Điều hướng cho việc chọn loại độ đo để thực hiên các thao vẽ đồ thị
+        """
         if(type=='DEGREE CENTRALITY'):
             self.d_degree_centrally()
         elif (type=='IN-DEGREE CENTRALITY'):
@@ -454,6 +540,9 @@ class backend(d_network,output_data):
             self.d_clustering_coefficient()
     
     def op_data_value(self,type,num):
+        """
+        Điều hướng cho việc chọn loại độ đo để trả về dữ liệu sau khi tính toán
+        """
         if(type=='DEGREE CENTRALITY'):
             try:
                 return self.stats_Degree.sort_values(by='DEGREE CENTRALITY', ascending=False).head(num)
@@ -492,6 +581,9 @@ class backend(d_network,output_data):
                 return self.stats_clustering_coeficient.sort_values(by='CLUSTERING COEFFICIENT', ascending=False).head(num)
 
     def op_data_fre(self,type):
+        """
+        Điều hướng cho việc chọn loại độ đo để trả về dữ liệu vè tần số và xác suất xuất hiện của độ đo đó
+        """
         try:
             return self.centrality_fre(type)
         except:
@@ -510,6 +602,9 @@ class backend(d_network,output_data):
             return self.centrality_fre(type)
     
     def link_prediction(self,type):
+        """
+        Điều hướng cho việc chọn loại thuật toán để thực hiên việc dự đoán
+        """
         if(type =='COMMON NEIGHBORS'):
             self.non_edges=nx.non_edges(self.G)
             return self.common_neighbors()
@@ -524,4 +619,7 @@ class backend(d_network,output_data):
             return self.katz()
 
     def get_n_nodes(self):
+        """
+        Trả về số lượng node của đồ thị
+        """
         return int(self.n_nodes)
